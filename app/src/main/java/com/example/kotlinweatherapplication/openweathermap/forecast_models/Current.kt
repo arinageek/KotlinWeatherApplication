@@ -3,7 +3,7 @@ package com.example.kotlinweatherapplication.openweathermap.forecast_models
 data class Current(
     val clouds: Int,
     val dew_point: Double,
-    val dt: Int,
+    val dt: Long,
     val feels_like: Double,
     val humidity: Int,
     val pressure: Int,

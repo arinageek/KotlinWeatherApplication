@@ -3,10 +3,10 @@ package com.example.kotlinweatherapplication.openweathermap.forecast_models
 data class Hourly(
     val clouds: Int,
     val dew_point: Double,
-    val dt: Int,
+    val dt: Long,
     val feels_like: Double,
     val humidity: Int,
-    val pop: Int,
+    val pop: Double,
     val pressure: Int,
     val temp: Double,
     val uvi: Double,
