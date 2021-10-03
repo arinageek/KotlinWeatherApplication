@@ -1,3 +1,12 @@
 <resources>
     <string name="app_name">KotlinWeatherApplication</string>
+    <string name="no_connection">Нет подключения</string>
+    <string name="update">Обновить</string>
+    <string name="notification_title">Установите ежедневные оповещения о погоде в вашем городе</string>
+    <string name="chosen_city">Выбранный город: </string>
+    <string name="chosen_time">Время оповещения: </string>
+    <string name="change">Изменить</string>
+    <string name="turn_off">Отключить</string>
+    <string name="enter_city">Введите город</string>
+    <string name="on_map">На карте</string>
 </resources>
