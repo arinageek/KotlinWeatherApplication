@@ -1,4 +1,4 @@
-package com.example.kotlinweatherapplication
+package com.example.kotlinweatherapplication.Utils
 
 object Constants {
     const val BASE_URL = "https://api.openweathermap.org/"

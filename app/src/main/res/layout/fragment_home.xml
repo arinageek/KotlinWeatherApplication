@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    tools:context=".ui.home.HomeFragment"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:background="@color/very_light_blue">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/very_light_blue"
+    tools:context=".ui.home.HomeFragment">
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/app_bar_layout"
@@ -50,95 +50,107 @@
 
     </LinearLayout>
 
-    <androidx.cardview.widget.CardView
-        android:id="@+id/cardView"
-        app:cardCornerRadius="10dp"
+    <ScrollView
+        android:layout_below="@+id/app_bar_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@+id/app_bar_layout"
-        android:layout_margin="16dp"
-        android:backgroundTint="@color/white"
-        android:elevation="8dp"
-        android:visibility="visible">
+        android:layout_margin="16dp">
 
-        <ImageView
-            android:id="@+id/star"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:layout_gravity="end"
-            android:layout_margin="8dp"
-            android:src="@drawable/ic_baseline_star_border_24" />
-
-        <LinearLayout
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cardView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:gravity="center_horizontal"
-            android:orientation="vertical"
-            android:paddingTop="16dp">
-
-
-            <TextView
-                android:id="@+id/text_city_name"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:fontFamily="sans-serif-light"
-                tools:text="Moscow"
-                android:textColor="@color/black"
-                android:textSize="32sp" />
-
-            <TextView
-                android:id="@+id/text_date_display"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:fontFamily="sans-serif-light"
-                tools:text="October, 3 2021"
-                android:textColor="@color/black"
-                android:textSize="16sp" />
-
-            <TextView
-                android:id="@+id/text_degrees"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:fontFamily="sans-serif-light"
-                tools:text="18°C"
-                android:textColor="@color/black"
-                android:textSize="56sp" />
-
-            <TextView
-                android:id="@+id/text_weather_description"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:fontFamily="sans-serif-light"
-                tools:text="Clouds"
-                android:textColor="@color/black"
-                android:textSize="16sp" />
+            android:backgroundTint="@color/white"
+            android:elevation="8dp"
+            android:visibility="visible"
+            app:cardCornerRadius="10dp">
 
             <ImageView
-                android:id="@+id/weather_icon"
-                tools:src="@android:drawable/btn_star"
-                android:layout_width="100dp"
-                android:layout_height="100dp" />
+                android:id="@+id/star"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_gravity="end"
+                android:layout_margin="8dp"
+                android:src="@drawable/ic_baseline_star_border_24" />
 
-            <RelativeLayout
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginTop="16dp"
-                android:background="@color/light_purple">
+                android:gravity="center_horizontal"
+                android:orientation="vertical"
+                android:paddingTop="16dp">
 
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/recyclerView"
-                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                    tools:listitem="@layout/forecast_item"
-                    android:layout_width="match_parent"
+                <TextView
+                    android:id="@+id/text_city_name"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginVertical="16dp"
-                    android:orientation="horizontal" />
+                    android:fontFamily="sans-serif-light"
+                    android:textColor="@color/black"
+                    android:textSize="32sp"
+                    tools:text="Moscow" />
 
-            </RelativeLayout>
+                <TextView
+                    android:id="@+id/text_date_display"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="sans-serif-light"
+                    android:textColor="@color/black"
+                    android:textSize="16sp"
+                    tools:text="October, 3 2021" />
 
-        </LinearLayout>
+                <TextView
+                    android:id="@+id/text_degrees"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="sans-serif-light"
+                    android:textColor="@color/black"
+                    android:textSize="56sp"
+                    tools:text="18°C" />
 
-    </androidx.cardview.widget.CardView>
+                <TextView
+                    android:id="@+id/text_weather_description"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="sans-serif-light"
+                    android:textColor="@color/black"
+                    android:textSize="16sp"
+                    tools:text="Clouds" />
+
+                <ImageView
+                    android:id="@+id/weather_icon"
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    tools:src="@android:drawable/btn_star" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="16dp"
+                    android:background="@color/light_purple"
+                    android:orientation="vertical">
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/recyclerView"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginVertical="16dp"
+                        android:orientation="horizontal"
+                        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                        tools:listitem="@layout/forecast_item" />
+
+                    <com.github.aachartmodel.aainfographics.aachartcreator.AAChartView
+                        android:id="@+id/aa_chart_view"
+                        android:layout_width="match_parent"
+                        android:layout_height="300dp">
+
+                    </com.github.aachartmodel.aainfographics.aachartcreator.AAChartView>
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+        </androidx.cardview.widget.CardView>
+    </ScrollView>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fab"

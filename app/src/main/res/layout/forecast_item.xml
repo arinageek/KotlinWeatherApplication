@@ -9,6 +9,7 @@
     android:orientation="vertical">
 
     <TextView
+        android:id="@+id/tv_date"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:fontFamily="sans-serif-light"
@@ -16,10 +17,12 @@
         tools:text="Чт, 18"/>
 
     <ImageView
+        android:id="@+id/iv_icon"
         android:layout_width="30dp"
         android:layout_height="30dp"
         tools:src="@drawable/ic_baseline_cloud_24"/>
     <TextView
+        android:id="@+id/tv_temp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:fontFamily="sans-serif-light"

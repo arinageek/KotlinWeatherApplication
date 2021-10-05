@@ -1,7 +1,6 @@
 package com.example.kotlinweatherapplication.openweathermap
 
-import androidx.lifecycle.LiveData
-import com.example.kotlinweatherapplication.Constants.WEATHER_API_KEY
+import com.example.kotlinweatherapplication.Utils.Constants.WEATHER_API_KEY
 import com.example.kotlinweatherapplication.openweathermap.forecast_models.ForecastWeatherResponse
 import retrofit2.http.GET
 import retrofit2.http.Query
