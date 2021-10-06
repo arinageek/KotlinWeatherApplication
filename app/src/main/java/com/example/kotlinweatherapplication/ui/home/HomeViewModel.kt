@@ -10,7 +10,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.kotlinweatherapplication.openweathermap.forecast_models.ForecastWeatherResponse
+import com.example.kotlinweatherapplication.networking.openweathermap.forecast_models.ForecastWeatherResponse
 import com.example.kotlinweatherapplication.repository.WeatherRepository
 import dagger.hilt.android.internal.Contexts.getApplication
 import dagger.hilt.android.lifecycle.HiltViewModel

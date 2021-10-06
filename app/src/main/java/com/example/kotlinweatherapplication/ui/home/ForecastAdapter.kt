@@ -10,7 +10,7 @@ import com.bumptech.glide.Glide
 import com.example.kotlinweatherapplication.Utils.Formatting.getDate
 import com.example.kotlinweatherapplication.Utils.Formatting.getTemp
 import com.example.kotlinweatherapplication.databinding.ForecastItemBinding
-import com.example.kotlinweatherapplication.openweathermap.forecast_models.Daily
+import com.example.kotlinweatherapplication.networking.openweathermap.forecast_models.Daily
 
 class ForecastAdapter : ListAdapter<Daily, ForecastAdapter.ViewHolder>(differCallback) {
 

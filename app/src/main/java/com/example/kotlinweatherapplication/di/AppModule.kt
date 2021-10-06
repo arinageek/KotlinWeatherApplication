@@ -1,7 +1,7 @@
 package com.example.kotlinweatherapplication.di
 
 import com.example.kotlinweatherapplication.Utils.Constants.BASE_URL
-import com.example.kotlinweatherapplication.openweathermap.WeatherApi
+import com.example.kotlinweatherapplication.networking.openweathermap.WeatherApi
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

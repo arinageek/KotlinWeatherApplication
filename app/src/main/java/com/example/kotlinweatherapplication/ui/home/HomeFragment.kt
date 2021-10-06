@@ -13,7 +13,7 @@ import com.example.kotlinweatherapplication.Utils.Formatting
 import com.example.kotlinweatherapplication.Utils.Formatting.getDate
 import com.example.kotlinweatherapplication.Utils.Formatting.getTemp
 import com.example.kotlinweatherapplication.databinding.FragmentHomeBinding
-import com.example.kotlinweatherapplication.openweathermap.forecast_models.Hourly
+import com.example.kotlinweatherapplication.networking.openweathermap.forecast_models.Hourly
 import com.github.aachartmodel.aainfographics.aachartcreator.AAChartModel
 import com.github.aachartmodel.aainfographics.aachartcreator.AAChartType
 import com.github.aachartmodel.aainfographics.aachartcreator.AASeriesElement

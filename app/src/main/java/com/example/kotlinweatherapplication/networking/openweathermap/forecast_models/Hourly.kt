@@ -1,4 +1,4 @@
-package com.example.kotlinweatherapplication.openweathermap.forecast_models
+package com.example.kotlinweatherapplication.networking.openweathermap.forecast_models
 
 data class Hourly(
     val clouds: Double,

@@ -99,6 +99,10 @@ dependencies {
     //AAChartCore
     implementation 'com.github.AAChartModel:AAChartCore-Kotlin:-SNAPSHOT'
 
+    //VK
+    implementation 'com.vk:android-sdk-core:3.x.x'
+    implementation 'com.vk:android-sdk-api:3.x.x // generated models and api methods'
+
 }
 
 // Allow references to generated code

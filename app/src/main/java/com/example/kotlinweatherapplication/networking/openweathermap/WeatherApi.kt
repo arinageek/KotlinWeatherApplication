@@ -1,7 +1,7 @@
-package com.example.kotlinweatherapplication.openweathermap
+package com.example.kotlinweatherapplication.networking.openweathermap
 
 import com.example.kotlinweatherapplication.Utils.Constants.WEATHER_API_KEY
-import com.example.kotlinweatherapplication.openweathermap.forecast_models.ForecastWeatherResponse
+import com.example.kotlinweatherapplication.networking.openweathermap.forecast_models.ForecastWeatherResponse
 import retrofit2.http.GET
 import retrofit2.http.Query
 

@@ -1,6 +1,6 @@
 package com.example.kotlinweatherapplication.repository
 
-import com.example.kotlinweatherapplication.openweathermap.WeatherApi
+import com.example.kotlinweatherapplication.networking.openweathermap.WeatherApi
 import javax.inject.Inject
 
 class WeatherRepository @Inject constructor(
