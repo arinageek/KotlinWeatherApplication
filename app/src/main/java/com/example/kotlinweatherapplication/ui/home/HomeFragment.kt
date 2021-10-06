@@ -2,12 +2,11 @@ package com.example.kotlinweatherapplication.ui.home
 
 import android.os.Bundle
 import android.util.Log
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import com.bumptech.glide.Glide
 import com.example.kotlinweatherapplication.R
 import com.example.kotlinweatherapplication.Utils.Formatting
@@ -19,6 +18,7 @@ import com.github.aachartmodel.aainfographics.aachartcreator.AAChartModel
 import com.github.aachartmodel.aainfographics.aachartcreator.AAChartType
 import com.github.aachartmodel.aainfographics.aachartcreator.AASeriesElement
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collect
 
 
 @AndroidEntryPoint
@@ -44,6 +44,21 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
 
         val adapter = ForecastAdapter()
         binding.recyclerView.adapter = adapter
+
+        viewLifecycleOwner.lifecycleScope.launchWhenStarted {
+            viewModel.event.collect { event ->
+                when(event){
+                    is HomeViewModel.WeatherEvent.showNoInternetConnectionMessage ->  {
+                        binding.tvNoConnection.visibility = View.VISIBLE
+                        binding.cardView.visibility = View.GONE
+                    }
+                    is HomeViewModel.WeatherEvent.removeNoInternetConnectionMessage -> {
+                        binding.tvNoConnection.visibility = View.GONE
+                        binding.cardView.visibility = View.VISIBLE
+                    }
+                }
+            }
+        }
 
         viewModel.weatherResponse.observe(viewLifecycleOwner){ response ->
             binding.apply {

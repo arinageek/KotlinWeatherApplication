@@ -25,36 +25,21 @@
 
     </com.google.android.material.appbar.AppBarLayout>
 
-    <LinearLayout
-        android:id="@+id/layout_no_connection"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:gravity="center"
-        android:orientation="vertical"
-        android:visibility="gone">
-
-        <TextView
-            android:id="@+id/tv_connection"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/no_connection"
-            android:textSize="24sp" />
-
-        <Button
-            android:id="@+id/retry_btn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:gravity="center"
-            android:text="@string/update" />
-
-    </LinearLayout>
+    <TextView
+        android:id="@+id/tv_no_connection"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:text="No Connection"
+        android:textSize="24sp"
+        android:visibility="gone" />
 
     <ScrollView
-        android:layout_below="@+id/app_bar_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_margin="16dp">
+        android:layout_below="@+id/app_bar_layout"
+        android:layout_margin="16dp"
+        android:visibility="visible">
 
         <androidx.cardview.widget.CardView
             android:id="@+id/cardView"
@@ -62,7 +47,6 @@
             android:layout_height="match_parent"
             android:backgroundTint="@color/white"
             android:elevation="8dp"
-            android:visibility="visible"
             app:cardCornerRadius="10dp">
 
             <ImageView
@@ -160,4 +144,5 @@
         android:layout_alignParentBottom="true"
         android:layout_margin="24dp"
         android:src="@drawable/ic_baseline_location_on_24" />
+
 </RelativeLayout>
