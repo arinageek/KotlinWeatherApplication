@@ -10,6 +10,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.kotlinweatherapplication.database.entities.City
 import com.example.kotlinweatherapplication.networking.openweathermap.forecast_models.ForecastWeatherResponse
 import com.example.kotlinweatherapplication.networking.vk.cities_models.CitiesResponse
 import com.example.kotlinweatherapplication.repository.Repository
@@ -28,7 +29,7 @@ class HomeViewModel @Inject constructor(
 
     private val TAG = "HomeViewModel"
 
-    private val eventChannel = Channel<WeatherEvent>()
+    private val eventChannel = Channel<Event>()
     val event = eventChannel.receiveAsFlow()
 
     private var _weatherResponse: MutableLiveData<ForecastWeatherResponse> = MutableLiveData()
@@ -39,6 +40,10 @@ class HomeViewModel @Inject constructor(
     val citiesResponse: LiveData<CitiesResponse>
         get() = _citiesResponse
 
+    private var _isAlreadySaved: MutableLiveData<Boolean> = MutableLiveData()
+    val isAlreadySaved: LiveData<Boolean>
+        get() = _isAlreadySaved
+
     var currentCity: String = "Moscow"
 
 
@@ -46,35 +51,50 @@ class HomeViewModel @Inject constructor(
         getWeatherForecast()
     }
 
+    fun insertCity() = viewModelScope.launch{
+        if(!currentCity.isNullOrBlank()){
+            repository.insertCity(City(name = currentCity))
+            _isAlreadySaved.postValue(true)
+        }
+    }
+
     fun getWeatherForecast(lat: Double = 55.7522, lon: Double = 37.6156) = viewModelScope.launch {
         if(isConnectedToInternet()) {
-            viewModelScope.launch { eventChannel.send(WeatherEvent.removeNoInternetConnectionMessage) }
+            viewModelScope.launch { eventChannel.send(Event.removeNoInternetConnectionMessage) }
             try{
                 val weather = repository.getWeatherForecast(lat = lat, lon = lon )
                 _weatherResponse.postValue(weather)
+                _isAlreadySaved.postValue(false)
             }catch(t: Throwable){
                 Log.d(TAG, "Something is wrong: " + t.message.toString())
             }
         }else{
-            viewModelScope.launch { eventChannel.send(WeatherEvent.showNoInternetConnectionMessage) }
+            viewModelScope.launch { eventChannel.send(Event.showNoInternetConnectionMessage) }
         }
     }
 
     fun getCities(query: String) = viewModelScope.launch {
-        try{
-            val response = repository.getCities(query)
-            _citiesResponse.postValue(response)
-            //Log.d(TAG, response.toString())
-        }catch(t: Throwable){
-            Log.d(TAG, t.message.toString())
+        if(isConnectedToInternet()) {
+            try {
+                val response = repository.getCities(query)
+                _citiesResponse.postValue(response)
+            } catch (t: Throwable) {
+                Log.d(TAG, t.message.toString())
+            }
         }
     }
 
     fun getCityCoordinates(city: String) = viewModelScope.launch{
-        val response = repository.getCityCoordinates(city+",ru")
-        response?.let {
-            currentCity = city
-            getWeatherForecast(lat = response[0].lat, lon = response[0].lon)
+        if(isConnectedToInternet()) {
+            try {
+                val response = repository.getCityCoordinates(city + ",ru")
+                response?.let {
+                    currentCity = city
+                    getWeatherForecast(lat = response[0].lat, lon = response[0].lon)
+                }
+            } catch (t: Throwable) {
+                Log.d(TAG, t.message.toString())
+            }
         }
     }
 
@@ -104,9 +124,9 @@ class HomeViewModel @Inject constructor(
         return false
     }
 
-    sealed class WeatherEvent {
-        object showNoInternetConnectionMessage: WeatherEvent()
-        object removeNoInternetConnectionMessage: WeatherEvent()
+    sealed class Event {
+        object showNoInternetConnectionMessage: Event()
+        object removeNoInternetConnectionMessage: Event()
     }
 
 }

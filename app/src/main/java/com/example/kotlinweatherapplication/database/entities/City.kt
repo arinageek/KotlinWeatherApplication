@@ -7,8 +7,7 @@ import androidx.room.PrimaryKey;
 data class City (
 
     @PrimaryKey(autoGenerate = true)
-    val id: Int,
-    val name: String,
-    val isHome: Boolean
+    val id: Int? = null,
+    val name: String
 
 )

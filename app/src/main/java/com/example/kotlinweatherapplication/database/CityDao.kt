@@ -7,18 +7,15 @@ import com.example.kotlinweatherapplication.database.entities.City
 @Dao
 interface CityDao {
 
-    @Insert
-    fun insert(city: City)
-
-    @Update
-    fun update(city: City)
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insert(city: City)
 
     @Delete
-    fun delete(city: City)
+    suspend fun delete(city: City)
 
     @Transaction
     @Query("DELETE FROM cities_table")
-    fun deleteAllCities()
+    suspend fun deleteAllCities()
 
     @Query("SELECT * FROM cities_table")
     fun getAllCities(): LiveData<List<City>>

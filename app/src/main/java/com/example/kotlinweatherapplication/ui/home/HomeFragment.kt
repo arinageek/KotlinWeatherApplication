@@ -3,7 +3,6 @@ package com.example.kotlinweatherapplication.ui.home
 import android.os.Bundle
 import android.util.Log
 import android.view.*
-import android.view.inputmethod.EditorInfo
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
@@ -56,13 +55,15 @@ class HomeFragment : Fragment(R.layout.fragment_home), CitiesOnItemClickListener
         val citiesAdapter = CitiesAdapter(this)
         binding.toolbar.citiesRecyclerView.adapter = citiesAdapter
 
-        var job : Job? = null
+        var job: Job? = null
         binding.toolbar.tvEnterCity.addTextChangedListener { editable ->
             job?.cancel()
-            job = MainScope().launch{
+            job = MainScope().launch {
                 delay(1500)
-                editable?.let{
-                    if(editable.toString().trim().isNotEmpty()) viewModel.getCities(editable.toString())
+                editable?.let {
+                    if (editable.toString().trim()
+                            .isNotEmpty()
+                    ) viewModel.getCities(editable.toString())
                 }
             }
         }
@@ -74,14 +75,23 @@ class HomeFragment : Fragment(R.layout.fragment_home), CitiesOnItemClickListener
             }
         }
 
+        binding.btnSaveCity.setOnClickListener {
+            viewModel.insertCity()
+        }
+
+        viewModel.isAlreadySaved.observe(viewLifecycleOwner){
+            if(it) binding.btnSaveCity.setImageResource(R.drawable.ic_filled_star)
+            else binding.btnSaveCity.setImageResource(R.drawable.ic_baseline_star_border_24)
+        }
+
         viewLifecycleOwner.lifecycleScope.launchWhenStarted {
             viewModel.event.collect { event ->
-                when(event){
-                    is HomeViewModel.WeatherEvent.showNoInternetConnectionMessage ->  {
+                when (event) {
+                    is HomeViewModel.Event.showNoInternetConnectionMessage -> {
                         binding.tvNoConnection.visibility = View.VISIBLE
                         binding.cardView.visibility = View.GONE
                     }
-                    is HomeViewModel.WeatherEvent.removeNoInternetConnectionMessage -> {
+                    is HomeViewModel.Event.removeNoInternetConnectionMessage -> {
                         binding.tvNoConnection.visibility = View.GONE
                         binding.cardView.visibility = View.VISIBLE
                     }
@@ -89,12 +99,12 @@ class HomeFragment : Fragment(R.layout.fragment_home), CitiesOnItemClickListener
             }
         }
 
-        viewModel.citiesResponse.observe(viewLifecycleOwner){ response ->
+        viewModel.citiesResponse.observe(viewLifecycleOwner) { response ->
             citiesAdapter.submitList(response.response.items)
             showAutocomplete()
         }
 
-        viewModel.weatherResponse.observe(viewLifecycleOwner){ response ->
+        viewModel.weatherResponse.observe(viewLifecycleOwner) { response ->
             binding.apply {
                 textCityName.text = viewModel.currentCity
                 textDateDisplay.text = getDate(response.current.dt)
@@ -104,8 +114,8 @@ class HomeFragment : Fragment(R.layout.fragment_home), CitiesOnItemClickListener
                     .load("https://openweathermap.org/img/wn/" + response.current.weather[0].icon + "@2x.png")
                     .into(weatherIcon)
                 forecastAdapter.submitList(response.daily)
-                if(!response.hourly.isNullOrEmpty()) {
-                    val chartModel: AAChartModel  = createChart(response.hourly)
+                if (!response.hourly.isNullOrEmpty()) {
+                    val chartModel: AAChartModel = createChart(response.hourly)
                     aaChartView.aa_drawChartWithChartModel(chartModel)
                 }
             }
@@ -114,17 +124,17 @@ class HomeFragment : Fragment(R.layout.fragment_home), CitiesOnItemClickListener
         return view
     }
 
-    private fun showAutocomplete(){
+    private fun showAutocomplete() {
         binding.toolbar.citiesRecyclerView.visibility = View.VISIBLE
     }
 
-    private fun hideAutocomplete(){
+    private fun hideAutocomplete() {
         binding.toolbar.citiesRecyclerView.visibility = View.GONE
     }
 
-    private fun createChart(hourly: List<Hourly>) : AAChartModel {
+    private fun createChart(hourly: List<Hourly>): AAChartModel {
         val list: ArrayList<Int> = ArrayList()
-        for(item in hourly){
+        for (item in hourly) {
             list.add(item.temp.toInt())
         }
         Log.d("HomeViewModel", list.toString())
@@ -133,10 +143,12 @@ class HomeFragment : Fragment(R.layout.fragment_home), CitiesOnItemClickListener
             .title("Weather by hours")
             .backgroundColor("#9a7ffa")
             .dataLabelsEnabled(false)
-            .series(arrayOf(
-                AASeriesElement()
-                    .name("Temperature")
-                    .data(list.toTypedArray()))
+            .series(
+                arrayOf(
+                    AASeriesElement()
+                        .name("Temperature")
+                        .data(list.toTypedArray())
+                )
             )
             .categories(hourly.map { h ->
                 Formatting.getFullDate(h.dt)
