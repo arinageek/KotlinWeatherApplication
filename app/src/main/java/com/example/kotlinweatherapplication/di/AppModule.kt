@@ -2,10 +2,12 @@ package com.example.kotlinweatherapplication.di
 
 import android.content.Context
 import androidx.room.Room
+import androidx.room.migration.Migration
 import com.example.kotlinweatherapplication.Utils.Constants.BASE_URL
 import com.example.kotlinweatherapplication.Utils.Constants.VK_BASE_URL
 import com.example.kotlinweatherapplication.database.CityDao
 import com.example.kotlinweatherapplication.database.CityDatabase
+import com.example.kotlinweatherapplication.networking.openweathermap.CurrentWeatherApi
 import com.example.kotlinweatherapplication.networking.openweathermap.GeocodingApi
 import com.example.kotlinweatherapplication.networking.openweathermap.WeatherApi
 import com.example.kotlinweatherapplication.networking.vk.CitiesApi
@@ -45,6 +47,11 @@ object AppModule {
     fun provideGeocodingApi(retrofit: Retrofit): GeocodingApi =
         retrofit.create(GeocodingApi::class.java)
 
+    @Singleton
+    @Provides
+    fun provideCurrentWeatherApi(retrofit: Retrofit): CurrentWeatherApi =
+        retrofit.create(CurrentWeatherApi::class.java)
+
     @Provides
     @Singleton
     fun provideCityDatabase(@ApplicationContext appContext: Context): CityDatabase =
@@ -52,7 +59,7 @@ object AppModule {
             appContext,
             CityDatabase::class.java,
             "city_database.db"
-        ).build()
+        ).fallbackToDestructiveMigration().build()
 
     @Provides
     @Singleton

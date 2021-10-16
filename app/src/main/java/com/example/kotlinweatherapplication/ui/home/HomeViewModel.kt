@@ -13,7 +13,8 @@ import androidx.lifecycle.viewModelScope
 import com.example.kotlinweatherapplication.database.entities.City
 import com.example.kotlinweatherapplication.networking.openweathermap.forecast_models.ForecastWeatherResponse
 import com.example.kotlinweatherapplication.networking.vk.cities_models.CitiesResponse
-import com.example.kotlinweatherapplication.repository.Repository
+import com.example.kotlinweatherapplication.repository.SavedCitiesRepository
+import com.example.kotlinweatherapplication.repository.WeatherRepository
 import dagger.hilt.android.internal.Contexts.getApplication
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
@@ -24,7 +25,8 @@ import javax.inject.Inject
 @HiltViewModel
 class HomeViewModel @Inject constructor(
     val app: Application,
-    private val repository: Repository
+    private val weatherRepository: WeatherRepository,
+    private val citiesRepository: SavedCitiesRepository
 ) : ViewModel() {
 
     private val TAG = "HomeViewModel"
@@ -53,7 +55,7 @@ class HomeViewModel @Inject constructor(
 
     fun insertCity() = viewModelScope.launch{
         if(!currentCity.isNullOrBlank()){
-            repository.insertCity(City(name = currentCity))
+            citiesRepository.insertCity(City(name = currentCity))
             _isAlreadySaved.postValue(true)
         }
     }
@@ -62,9 +64,11 @@ class HomeViewModel @Inject constructor(
         if(isConnectedToInternet()) {
             viewModelScope.launch { eventChannel.send(Event.removeNoInternetConnectionMessage) }
             try{
-                val weather = repository.getWeatherForecast(lat = lat, lon = lon )
+                val weather = weatherRepository.getWeatherForecast(lat = lat, lon = lon )
                 _weatherResponse.postValue(weather)
                 _isAlreadySaved.postValue(false)
+
+                Log.d(TAG, "Current city: "+currentCity)
             }catch(t: Throwable){
                 Log.d(TAG, "Something is wrong: " + t.message.toString())
             }
@@ -76,7 +80,7 @@ class HomeViewModel @Inject constructor(
     fun getCities(query: String) = viewModelScope.launch {
         if(isConnectedToInternet()) {
             try {
-                val response = repository.getCities(query)
+                val response = weatherRepository.getCities(query)
                 _citiesResponse.postValue(response)
             } catch (t: Throwable) {
                 Log.d(TAG, t.message.toString())
@@ -87,7 +91,7 @@ class HomeViewModel @Inject constructor(
     fun getCityCoordinates(city: String) = viewModelScope.launch{
         if(isConnectedToInternet()) {
             try {
-                val response = repository.getCityCoordinates(city + ",ru")
+                val response = weatherRepository.getCityCoordinates(city + ",ru")
                 response?.let {
                     currentCity = city
                     getWeatherForecast(lat = response[0].lat, lon = response[0].lon)

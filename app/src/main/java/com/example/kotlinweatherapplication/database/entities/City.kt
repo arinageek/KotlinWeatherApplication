@@ -6,8 +6,7 @@ import androidx.room.PrimaryKey;
 @Entity (tableName="cities_table")
 data class City (
 
-    @PrimaryKey(autoGenerate = true)
-    val id: Int? = null,
+    @PrimaryKey
     val name: String
 
 )
