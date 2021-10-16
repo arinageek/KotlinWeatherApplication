@@ -10,7 +10,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.kotlinweatherapplication.databinding.CityItemBinding
 import com.example.kotlinweatherapplication.networking.vk.cities_models.Item
 
-class CitiesAdapter : ListAdapter<Item, CitiesAdapter.ViewHolder>(differCallback) {
+class CitiesAdapter(private val listener: CitiesOnItemClickListener?) : ListAdapter<Item, CitiesAdapter.ViewHolder>(differCallback) {
 
     inner class ViewHolder(private val binding: CityItemBinding) :
         RecyclerView.ViewHolder(binding.root) {
@@ -19,6 +19,9 @@ class CitiesAdapter : ListAdapter<Item, CitiesAdapter.ViewHolder>(differCallback
             Log.d("CitiesAdapter", "Binding "+city.title)
             binding.apply{
                 tvCity.text = city.title
+                root.setOnClickListener { view ->
+                    listener?.onItemClick(city)
+                }
             }
         }
     }

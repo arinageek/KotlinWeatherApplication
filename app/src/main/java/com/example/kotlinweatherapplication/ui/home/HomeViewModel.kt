@@ -39,19 +39,21 @@ class HomeViewModel @Inject constructor(
     val citiesResponse: LiveData<CitiesResponse>
         get() = _citiesResponse
 
+    var currentCity: String = "Moscow"
+
 
     init {
         getWeatherForecast()
     }
 
-    fun getWeatherForecast() = viewModelScope.launch {
+    fun getWeatherForecast(lat: Double = 55.7522, lon: Double = 37.6156) = viewModelScope.launch {
         if(isConnectedToInternet()) {
             viewModelScope.launch { eventChannel.send(WeatherEvent.removeNoInternetConnectionMessage) }
             try{
-                val weather = repository.getWeatherForecast(55.7522,37.6156 )
+                val weather = repository.getWeatherForecast(lat = lat, lon = lon )
                 _weatherResponse.postValue(weather)
             }catch(t: Throwable){
-                Log.d(TAG, t.message.toString())
+                Log.d(TAG, "Something is wrong: " + t.message.toString())
             }
         }else{
             viewModelScope.launch { eventChannel.send(WeatherEvent.showNoInternetConnectionMessage) }
@@ -65,6 +67,14 @@ class HomeViewModel @Inject constructor(
             //Log.d(TAG, response.toString())
         }catch(t: Throwable){
             Log.d(TAG, t.message.toString())
+        }
+    }
+
+    fun getCityCoordinates(city: String) = viewModelScope.launch{
+        val response = repository.getCityCoordinates(city+",ru")
+        response?.let {
+            currentCity = city
+            getWeatherForecast(lat = response[0].lat, lon = response[0].lon)
         }
     }
 

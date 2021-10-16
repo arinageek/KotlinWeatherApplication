@@ -28,22 +28,15 @@
         </FrameLayout>
 
         <ImageView
-            android:id="@+id/button_find"
+            android:id="@+id/button_close"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:padding="7dp"
             android:scaleType="fitCenter"
-            app:srcCompat="@drawable/ic_baseline_search_24" />
+            app:srcCompat="@drawable/ic_close" />
 
     </LinearLayout>
-
-    <!--<ProgressBar
-        android:id="@+id/progress_bar_cities"
-        style="@android:style/Widget.ProgressBar.Inverse"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:visibility="visible" />-->
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/cities_recycler_view"

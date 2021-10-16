@@ -3,6 +3,7 @@ package com.example.kotlinweatherapplication.ui.home
 import android.os.Bundle
 import android.util.Log
 import android.view.*
+import android.view.inputmethod.EditorInfo
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
@@ -15,10 +16,12 @@ import com.example.kotlinweatherapplication.Utils.Formatting.getDate
 import com.example.kotlinweatherapplication.Utils.Formatting.getTemp
 import com.example.kotlinweatherapplication.databinding.FragmentHomeBinding
 import com.example.kotlinweatherapplication.networking.openweathermap.forecast_models.Hourly
+import com.example.kotlinweatherapplication.networking.vk.cities_models.Item
 import com.github.aachartmodel.aainfographics.aachartcreator.AAChartModel
 import com.github.aachartmodel.aainfographics.aachartcreator.AAChartType
 import com.github.aachartmodel.aainfographics.aachartcreator.AASeriesElement
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.android.synthetic.main.cities_autocomplete.*
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.delay
@@ -27,7 +30,7 @@ import kotlinx.coroutines.launch
 
 
 @AndroidEntryPoint
-class HomeFragment : Fragment(R.layout.fragment_home) {
+class HomeFragment : Fragment(R.layout.fragment_home), CitiesOnItemClickListener {
 
     private val viewModel by viewModels<HomeViewModel>()
 
@@ -50,17 +53,24 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         val forecastAdapter = ForecastAdapter()
         binding.recyclerView.adapter = forecastAdapter
 
-        val citiesAdapter = CitiesAdapter()
+        val citiesAdapter = CitiesAdapter(this)
         binding.toolbar.citiesRecyclerView.adapter = citiesAdapter
 
         var job : Job? = null
         binding.toolbar.tvEnterCity.addTextChangedListener { editable ->
             job?.cancel()
             job = MainScope().launch{
-                delay(3000)
+                delay(1500)
                 editable?.let{
-                    if(editable.toString().isNotEmpty()) viewModel.getCities(editable.toString())
+                    if(editable.toString().trim().isNotEmpty()) viewModel.getCities(editable.toString())
                 }
+            }
+        }
+        binding.toolbar.buttonClose.setOnClickListener {
+            hideAutocomplete()
+            binding.toolbar.apply {
+                tvEnterCity.setText("")
+                tvEnterCity.clearFocus()
             }
         }
 
@@ -81,12 +91,12 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
 
         viewModel.citiesResponse.observe(viewLifecycleOwner){ response ->
             citiesAdapter.submitList(response.response.items)
-            binding.toolbar.citiesRecyclerView.visibility = View.VISIBLE
+            showAutocomplete()
         }
 
         viewModel.weatherResponse.observe(viewLifecycleOwner){ response ->
             binding.apply {
-                textCityName.text = "Moscow"
+                textCityName.text = viewModel.currentCity
                 textDateDisplay.text = getDate(response.current.dt)
                 textDegrees.text = getTemp(response.current.temp)
                 textWeatherDescription.text = response.current.weather[0].description
@@ -104,7 +114,15 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         return view
     }
 
-    fun createChart(hourly: List<Hourly>) : AAChartModel {
+    private fun showAutocomplete(){
+        binding.toolbar.citiesRecyclerView.visibility = View.VISIBLE
+    }
+
+    private fun hideAutocomplete(){
+        binding.toolbar.citiesRecyclerView.visibility = View.GONE
+    }
+
+    private fun createChart(hourly: List<Hourly>) : AAChartModel {
         val list: ArrayList<Int> = ArrayList()
         for(item in hourly){
             list.add(item.temp.toInt())
@@ -129,6 +147,15 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    override fun onItemClick(city: Item) {
+        hideAutocomplete()
+        binding.toolbar.apply {
+            tvEnterCity.setText("")
+            tvEnterCity.clearFocus()
+        }
+        viewModel.getCityCoordinates(city.title)
     }
 
 }
