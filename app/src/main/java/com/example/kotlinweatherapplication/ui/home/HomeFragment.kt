@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.util.Log
 import android.view.*
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
@@ -18,7 +19,11 @@ import com.github.aachartmodel.aainfographics.aachartcreator.AAChartModel
 import com.github.aachartmodel.aainfographics.aachartcreator.AAChartType
 import com.github.aachartmodel.aainfographics.aachartcreator.AASeriesElement
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.MainScope
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.launch
 
 
 @AndroidEntryPoint
@@ -42,8 +47,22 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
         val view = binding.root
 
-        val adapter = ForecastAdapter()
-        binding.recyclerView.adapter = adapter
+        val forecastAdapter = ForecastAdapter()
+        binding.recyclerView.adapter = forecastAdapter
+
+        val citiesAdapter = CitiesAdapter()
+        binding.toolbar.citiesRecyclerView.adapter = citiesAdapter
+
+        var job : Job? = null
+        binding.toolbar.tvEnterCity.addTextChangedListener { editable ->
+            job?.cancel()
+            job = MainScope().launch{
+                delay(3000)
+                editable?.let{
+                    if(editable.toString().isNotEmpty()) viewModel.getCities(editable.toString())
+                }
+            }
+        }
 
         viewLifecycleOwner.lifecycleScope.launchWhenStarted {
             viewModel.event.collect { event ->
@@ -60,6 +79,11 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
             }
         }
 
+        viewModel.citiesResponse.observe(viewLifecycleOwner){ response ->
+            citiesAdapter.submitList(response.response.items)
+            binding.toolbar.citiesRecyclerView.visibility = View.VISIBLE
+        }
+
         viewModel.weatherResponse.observe(viewLifecycleOwner){ response ->
             binding.apply {
                 textCityName.text = "Moscow"
@@ -69,7 +93,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
                 Glide.with(this@HomeFragment)
                     .load("https://openweathermap.org/img/wn/" + response.current.weather[0].icon + "@2x.png")
                     .into(weatherIcon)
-                adapter.submitList(response.daily)
+                forecastAdapter.submitList(response.daily)
                 if(!response.hourly.isNullOrEmpty()) {
                     val chartModel: AAChartModel  = createChart(response.hourly)
                     aaChartView.aa_drawChartWithChartModel(chartModel)

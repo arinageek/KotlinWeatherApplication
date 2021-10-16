@@ -11,7 +11,8 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.kotlinweatherapplication.networking.openweathermap.forecast_models.ForecastWeatherResponse
-import com.example.kotlinweatherapplication.repository.WeatherRepository
+import com.example.kotlinweatherapplication.networking.vk.cities_models.CitiesResponse
+import com.example.kotlinweatherapplication.repository.Repository
 import dagger.hilt.android.internal.Contexts.getApplication
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
@@ -22,7 +23,7 @@ import javax.inject.Inject
 @HiltViewModel
 class HomeViewModel @Inject constructor(
     val app: Application,
-    private val repository: WeatherRepository
+    private val repository: Repository
 ) : ViewModel() {
 
     private val TAG = "HomeViewModel"
@@ -33,6 +34,11 @@ class HomeViewModel @Inject constructor(
     private var _weatherResponse: MutableLiveData<ForecastWeatherResponse> = MutableLiveData()
     val weatherResponse: LiveData<ForecastWeatherResponse>
     get() = _weatherResponse
+
+    private var _citiesResponse: MutableLiveData<CitiesResponse> = MutableLiveData()
+    val citiesResponse: LiveData<CitiesResponse>
+        get() = _citiesResponse
+
 
     init {
         getWeatherForecast()
@@ -49,6 +55,16 @@ class HomeViewModel @Inject constructor(
             }
         }else{
             viewModelScope.launch { eventChannel.send(WeatherEvent.showNoInternetConnectionMessage) }
+        }
+    }
+
+    fun getCities(query: String) = viewModelScope.launch {
+        try{
+            val response = repository.getCities(query)
+            _citiesResponse.postValue(response)
+            //Log.d(TAG, response.toString())
+        }catch(t: Throwable){
+            Log.d(TAG, t.message.toString())
         }
     }
 

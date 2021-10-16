@@ -19,7 +19,7 @@
 
             <include
                 android:id="@+id/toolbar"
-                layout="@layout/layout_home_toolbar" />
+                layout="@layout/cities_autocomplete"/>
 
         </androidx.appcompat.widget.Toolbar>
 

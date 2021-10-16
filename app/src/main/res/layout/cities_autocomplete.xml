@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/coord"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:id="@+id/linear"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:orientation="horizontal"
+        android:weightSum="6">
+
+        <FrameLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="5">
+
+            <EditText
+                android:id="@+id/tv_enter_city"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:hint="City"
+                android:inputType="textCapSentences" />
+
+        </FrameLayout>
+
+        <ImageView
+            android:id="@+id/button_find"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:padding="7dp"
+            android:scaleType="fitCenter"
+            app:srcCompat="@drawable/ic_baseline_search_24" />
+
+    </LinearLayout>
+
+    <!--<ProgressBar
+        android:id="@+id/progress_bar_cities"
+        style="@android:style/Widget.ProgressBar.Inverse"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="visible" />-->
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/cities_recycler_view"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        android:layout_width="match_parent"
+        android:visibility="gone"
+        android:layout_height="200dp" />
+
+</LinearLayout>

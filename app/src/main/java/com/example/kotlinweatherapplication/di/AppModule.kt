@@ -1,7 +1,9 @@
 package com.example.kotlinweatherapplication.di
 
 import com.example.kotlinweatherapplication.Utils.Constants.BASE_URL
+import com.example.kotlinweatherapplication.Utils.Constants.VK_BASE_URL
 import com.example.kotlinweatherapplication.networking.openweathermap.WeatherApi
+import com.example.kotlinweatherapplication.networking.vk.CitiesApi
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -26,5 +28,10 @@ object AppModule {
     @Provides
     fun provideWeatherApi(retrofit: Retrofit): WeatherApi =
         retrofit.create(WeatherApi::class.java)
+
+    @Singleton
+    @Provides
+    fun provideCitiesApi(retrofit: Retrofit): CitiesApi =
+        retrofit.create(CitiesApi::class.java)
 
  }
