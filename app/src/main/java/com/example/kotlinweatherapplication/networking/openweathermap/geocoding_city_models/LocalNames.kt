@@ -1,4 +1,4 @@
-package com.example.kotlinweatherapplication.networking.openweathermap.geocoding_models
+package com.example.kotlinweatherapplication.networking.openweathermap.geocoding_city_models
 
 data class LocalNames(
     val af: String,

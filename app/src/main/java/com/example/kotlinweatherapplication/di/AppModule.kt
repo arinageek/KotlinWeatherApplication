@@ -2,15 +2,13 @@ package com.example.kotlinweatherapplication.di
 
 import android.content.Context
 import androidx.room.Room
-import androidx.room.migration.Migration
 import com.example.kotlinweatherapplication.Utils.Constants.BASE_URL
-import com.example.kotlinweatherapplication.Utils.Constants.VK_BASE_URL
 import com.example.kotlinweatherapplication.database.CityDao
 import com.example.kotlinweatherapplication.database.CityDatabase
 import com.example.kotlinweatherapplication.networking.openweathermap.CurrentWeatherApi
 import com.example.kotlinweatherapplication.networking.openweathermap.GeocodingApi
 import com.example.kotlinweatherapplication.networking.openweathermap.WeatherApi
-import com.example.kotlinweatherapplication.networking.vk.CitiesApi
+import com.example.kotlinweatherapplication.networking.vk.VKApi
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -39,8 +37,8 @@ object AppModule {
 
     @Singleton
     @Provides
-    fun provideCitiesApi(retrofit: Retrofit): CitiesApi =
-        retrofit.create(CitiesApi::class.java)
+    fun provideCitiesApi(retrofit: Retrofit): VKApi =
+        retrofit.create(VKApi::class.java)
 
     @Singleton
     @Provides

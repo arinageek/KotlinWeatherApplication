@@ -2,9 +2,6 @@ package com.example.kotlinweatherapplication.repository
 
 import com.example.kotlinweatherapplication.database.CityDao
 import com.example.kotlinweatherapplication.database.entities.City
-import com.example.kotlinweatherapplication.networking.openweathermap.GeocodingApi
-import com.example.kotlinweatherapplication.networking.openweathermap.WeatherApi
-import com.example.kotlinweatherapplication.networking.vk.CitiesApi
 import javax.inject.Inject
 
 class SavedCitiesRepository @Inject constructor(

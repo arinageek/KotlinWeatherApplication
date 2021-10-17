@@ -79,7 +79,7 @@ class HomeViewModel @Inject constructor(
         if (isConnectedToInternet()) {
             eventChannel.send(Event.removeNoInternetConnectionMessage)
             try {
-                val response = weatherRepository.getCities(query)
+                val response = weatherRepository.getCities(query, 1) //HARDCODED!!!!!!!!!!
                 _citiesResponse.postValue(response)
             } catch (t: Throwable) {
                 Log.d(TAG, t.message.toString())
@@ -93,7 +93,7 @@ class HomeViewModel @Inject constructor(
         if (isConnectedToInternet()) {
             eventChannel.send(Event.removeNoInternetConnectionMessage)
             try {
-                val response = weatherRepository.getCityCoordinates(city + ",ru")
+                val response = weatherRepository.getCityCoordinates(city)
                 response?.let {
                     currentCity = city
                     getWeatherForecast(lat = response[0].lat, lon = response[0].lon)

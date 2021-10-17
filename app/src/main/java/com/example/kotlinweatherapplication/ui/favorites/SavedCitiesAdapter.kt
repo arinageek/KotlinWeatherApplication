@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.example.kotlinweatherapplication.Utils.Formatting.getTemp
 import com.example.kotlinweatherapplication.databinding.SavedCityItemBinding
 import com.example.kotlinweatherapplication.networking.openweathermap.current_weather_models.CurrentWeatherResponse
 
@@ -20,7 +21,7 @@ class SavedCitiesAdapter : ListAdapter<CurrentWeatherResponse, SavedCitiesAdapte
         fun bind(weather: CurrentWeatherResponse) {
             binding.apply{
                 tvCity.text = weather.name
-                tvDegrees.text = weather.main.temp.toInt().toString()+"°C"
+                tvDegrees.text = getTemp(weather.main.temp)
                 Glide.with(itemView)
                     .load("https://openweathermap.org/img/wn/" + weather.weather[0].icon + "@2x.png")
                     .into(ivIcon)
