@@ -36,7 +36,7 @@ class HomeViewModel @Inject constructor(
 
     private var _weatherResponse: MutableLiveData<ForecastWeatherResponse> = MutableLiveData()
     val weatherResponse: LiveData<ForecastWeatherResponse>
-    get() = _weatherResponse
+        get() = _weatherResponse
 
     private var _citiesResponse: MutableLiveData<CitiesResponse> = MutableLiveData()
     val citiesResponse: LiveData<CitiesResponse>
@@ -53,43 +53,45 @@ class HomeViewModel @Inject constructor(
         getWeatherForecast()
     }
 
-    fun insertCity() = viewModelScope.launch{
-        if(!currentCity.isNullOrBlank()){
+    fun insertCity() = viewModelScope.launch {
+        if (!currentCity.isNullOrBlank()) {
             citiesRepository.insertCity(City(name = currentCity))
             _isAlreadySaved.postValue(true)
         }
     }
 
     fun getWeatherForecast(lat: Double = 55.7522, lon: Double = 37.6156) = viewModelScope.launch {
-        if(isConnectedToInternet()) {
-            viewModelScope.launch { eventChannel.send(Event.removeNoInternetConnectionMessage) }
-            try{
-                val weather = weatherRepository.getWeatherForecast(lat = lat, lon = lon )
+        if (isConnectedToInternet()) {
+            eventChannel.send(Event.removeNoInternetConnectionMessage)
+            try {
+                val weather = weatherRepository.getWeatherForecast(lat = lat, lon = lon)
                 _weatherResponse.postValue(weather)
                 _isAlreadySaved.postValue(false)
-
-                Log.d(TAG, "Current city: "+currentCity)
-            }catch(t: Throwable){
-                Log.d(TAG, "Something is wrong: " + t.message.toString())
+            } catch (t: Throwable) {
+                Log.d(TAG, t.message.toString())
             }
-        }else{
-            viewModelScope.launch { eventChannel.send(Event.showNoInternetConnectionMessage) }
+        } else {
+            eventChannel.send(Event.showNoInternetConnectionMessage)
         }
     }
 
     fun getCities(query: String) = viewModelScope.launch {
-        if(isConnectedToInternet()) {
+        if (isConnectedToInternet()) {
+            eventChannel.send(Event.removeNoInternetConnectionMessage)
             try {
                 val response = weatherRepository.getCities(query)
                 _citiesResponse.postValue(response)
             } catch (t: Throwable) {
                 Log.d(TAG, t.message.toString())
             }
+        } else {
+            eventChannel.send(Event.showNoInternetConnectionMessage)
         }
     }
 
-    fun getCityCoordinates(city: String) = viewModelScope.launch{
-        if(isConnectedToInternet()) {
+    fun getCityCoordinates(city: String) = viewModelScope.launch {
+        if (isConnectedToInternet()) {
+            eventChannel.send(Event.removeNoInternetConnectionMessage)
             try {
                 val response = weatherRepository.getCityCoordinates(city + ",ru")
                 response?.let {
@@ -99,6 +101,8 @@ class HomeViewModel @Inject constructor(
             } catch (t: Throwable) {
                 Log.d(TAG, t.message.toString())
             }
+        } else {
+            eventChannel.send(Event.showNoInternetConnectionMessage)
         }
     }
 
@@ -129,8 +133,8 @@ class HomeViewModel @Inject constructor(
     }
 
     sealed class Event {
-        object showNoInternetConnectionMessage: Event()
-        object removeNoInternetConnectionMessage: Event()
+        object showNoInternetConnectionMessage : Event()
+        object removeNoInternetConnectionMessage : Event()
     }
 
 }

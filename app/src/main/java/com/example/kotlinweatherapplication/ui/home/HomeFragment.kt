@@ -79,8 +79,8 @@ class HomeFragment : Fragment(R.layout.fragment_home), CitiesOnItemClickListener
             viewModel.insertCity()
         }
 
-        viewModel.isAlreadySaved.observe(viewLifecycleOwner){
-            if(it) binding.btnSaveCity.setImageResource(R.drawable.ic_filled_star)
+        viewModel.isAlreadySaved.observe(viewLifecycleOwner) {
+            if (it) binding.btnSaveCity.setImageResource(R.drawable.ic_filled_star)
             else binding.btnSaveCity.setImageResource(R.drawable.ic_baseline_star_border_24)
         }
 
