@@ -5,10 +5,10 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.kotlinweatherapplication.database.DataStoreManager
-import com.example.kotlinweatherapplication.networking.vk.cities_models.CitiesResponse
-import com.example.kotlinweatherapplication.networking.vk.countries_models.CountriesResponse
 import com.example.kotlinweatherapplication.repository.WeatherRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -18,46 +18,63 @@ class SettingsViewModel @Inject constructor(
     private val repository: WeatherRepository
 ) : ViewModel() {
 
-    private var listOfCountryIds: List<Int> = listOf()
-
     private var _citiesResponse: MutableLiveData<List<String>> = MutableLiveData()
     val citiesResponse: LiveData<List<String>>
         get() = _citiesResponse
 
-    private var _countriesResponse: MutableLiveData<List<String>> = MutableLiveData()
-    val countriesResponse: LiveData<List<String>>
-        get() = _countriesResponse
+    var savedCountry: MutableLiveData<String> = MutableLiveData()
+    var savedCity: MutableLiveData<String> = MutableLiveData()
 
-    private var _countrySelected: MutableLiveData<Boolean> = MutableLiveData()
-    val countrySelected: LiveData<Boolean>
-        get() = _countrySelected
+    private var currentCountry: String = ""
+    private var currentCountryId: Int = -1
+    private var currentCity: String = ""
 
-    private var countryId: Int = -1
+    private val eventChannel = Channel<SettingsEvent>()
+    val event = eventChannel.receiveAsFlow()
 
     init {
-        getCountries()
-    }
-
-    fun getCountries() = viewModelScope.launch {
-        val countries = repository.getCountries()
-        val listOfCountryNames = countries.response.items.map { item -> item.title }
-        listOfCountryIds = countries.response.items.map { item -> item.id }
-        _countriesResponse.postValue(listOfCountryNames)
+        getDataFromDb()
     }
 
     fun getCities(query: String) = viewModelScope.launch {
-        if(countryId == -1) return@launch
-        val cities = repository.getCities(query = query, countryId)
+        if (currentCountryId == -1) return@launch
+        val cities = repository.getCities(query = query, countryId = currentCountryId)
         val listOfCityNames = cities.response.items.map { item -> item.title }
         _citiesResponse.postValue(listOfCityNames)
     }
 
-    fun saveCountry(position: Int) = viewModelScope.launch {
-        if (countriesResponse.value.isNullOrEmpty()) return@launch
-        countryId = listOfCountryIds.get(position)
-        dataStore.setCountryId(countryId)
-        dataStore.setCountryName(countriesResponse.value?.get(position)!!)
-        _countrySelected.postValue(true)
+    fun getDataFromDb() = viewModelScope.launch {
+
+        //country
+        val country = dataStore.getCountryName()
+        savedCountry.postValue(country)
+
+        //city
+        val city = dataStore.getCityName()
+        savedCity.postValue(city)
+    }
+
+    fun saveCountry(name: String, id: Int) {
+        currentCountryId = id
+        currentCountry = name
+    }
+
+    fun saveCity(name: String) {
+        currentCity = name
+    }
+
+    fun saveDataToDb() = viewModelScope.launch {
+        if (currentCity.isNullOrBlank() || currentCountry.isNullOrBlank() || currentCountryId == -1) {
+            eventChannel.send(SettingsEvent.ShowIncorrectDataNotification)
+            return@launch
+        }
+        dataStore.setCountryId(currentCountryId)
+        dataStore.setCountryName(currentCountry)
+        dataStore.setCityName(currentCity)
+    }
+
+    sealed class SettingsEvent {
+        object ShowIncorrectDataNotification : SettingsEvent()
     }
 
 }

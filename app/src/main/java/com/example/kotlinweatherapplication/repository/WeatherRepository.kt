@@ -17,6 +17,5 @@ class WeatherRepository @Inject constructor(
     suspend fun getCities(query: String, countryId: Int) = vkApi.getCities(query = query, countryId = countryId)
     suspend fun getCityCoordinates(query: String) = geocodingApi.getCityCoordinates(query = query)
     suspend fun getCurrentWeather(query: String) = currentWeatherApi.getCurrentWeather(query)
-    suspend fun getCountries() = vkApi.getCountries()
 
 }
