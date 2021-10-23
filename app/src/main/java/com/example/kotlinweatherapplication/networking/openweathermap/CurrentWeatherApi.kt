@@ -9,8 +9,9 @@ interface CurrentWeatherApi {
 
     @GET("data/2.5/weather?")
     suspend fun getCurrentWeather(@Query("q") query: String,
-                                   @Query("units") units: String = "metric",
-                                   @Query("appid") appId: String = WEATHER_API_KEY)
+                                  @Query("lang") lang: String = "ru",
+                                  @Query("units") units: String = "metric",
+                                  @Query("appid") appId: String = WEATHER_API_KEY)
     : CurrentWeatherResponse
 
 }

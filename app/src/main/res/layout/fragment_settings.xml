@@ -17,7 +17,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="16dp"
-            android:text="Where do you live?"
+            android:text="@string/where_do_you_live"
             android:textAlignment="center"
             android:textColor="@color/black"
             android:textSize="24dp" />
@@ -44,7 +44,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="32dp"
-            android:text="SAVE" />
+            android:paddingHorizontal="32dp"
+            android:paddingVertical="16dp"
+            android:text="@string/save" />
 
     </LinearLayout>
 

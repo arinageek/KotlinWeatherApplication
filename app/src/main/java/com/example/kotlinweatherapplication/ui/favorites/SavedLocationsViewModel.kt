@@ -43,6 +43,12 @@ class SavedLocationsViewModel @Inject constructor(
         getCitiesFromDb()
     }
 
+    fun deleteCity(city: CurrentWeatherResponse) = viewModelScope.launch {
+        weatherList.remove(city)
+        _weatherResponse.postValue(weatherList)
+        citiesRepository.deleteCity(city.name)
+    }
+
     fun getCitiesFromDb() = viewModelScope.launch {
         try {
             val response = citiesRepository.getAllCities()
@@ -57,6 +63,7 @@ class SavedLocationsViewModel @Inject constructor(
             eventChannel.send(SavedLocationsEvent.removeNoInternetConnectionMessage)
             for (city in cities) {
                 val response = weatherRepository.getCurrentWeather(city.name)
+                response.name = city.name //otherwise deletion from db won't work properly
                 weatherList.add(response)
                 _weatherResponse.postValue(weatherList)
             }

@@ -7,7 +7,7 @@ import javax.inject.Inject
 class SavedCitiesRepository @Inject constructor(
     private val cityDao: CityDao
 ) {
-    suspend fun insertCity(city: City) = cityDao.insert(city)
-    suspend fun deleteCity(city: City) = cityDao.delete(city)
+    suspend fun insertCity(city: String) = cityDao.insert(City(name = city))
+    suspend fun deleteCity(city: String) = cityDao.delete(City(name = city))
     suspend fun getAllCities() = cityDao.getAllCities()
 }

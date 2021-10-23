@@ -22,7 +22,7 @@
                 android:id="@+id/tv_enter_city"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:hint="City"
+                android:hint="@string/city"
                 android:inputType="textCapSentences" />
 
         </FrameLayout>

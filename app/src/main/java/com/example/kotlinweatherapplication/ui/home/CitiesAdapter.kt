@@ -1,6 +1,5 @@
 package com.example.kotlinweatherapplication.ui.home
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.AsyncListDiffer
@@ -16,7 +15,6 @@ class CitiesAdapter(private val listener: CitiesOnItemClickListener?) : ListAdap
         RecyclerView.ViewHolder(binding.root) {
 
         fun bind(city: Item) {
-            Log.d("CitiesAdapter", "Binding "+city.title)
             binding.apply{
                 tvCity.text = city.title
                 root.setOnClickListener { view ->

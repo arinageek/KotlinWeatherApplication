@@ -45,7 +45,7 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
             viewModel.event.collect { event ->
                 when (event) {
                     is SettingsViewModel.SettingsEvent.ShowIncorrectDataNotification -> {
-                        Snackbar.make(view, "Incorrect location", Snackbar.LENGTH_SHORT).show()
+                        Snackbar.make(view, "Incorrect or already saved location", Snackbar.LENGTH_SHORT).show()
                     }
                 }
             }
@@ -67,7 +67,7 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
         binding.etCities.addTextChangedListener { editable ->
             job?.cancel()
             job = MainScope().launch {
-                delay(1500)
+                delay(500)
                 editable?.let {
                     if (editable.toString().trim()
                             .isNotEmpty()

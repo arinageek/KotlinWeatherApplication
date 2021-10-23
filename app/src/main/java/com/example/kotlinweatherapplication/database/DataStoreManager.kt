@@ -20,17 +20,17 @@ class DataStoreManager @Inject constructor(
     suspend fun getCountryId(): Int {
         val pref = intPreferencesKey("countryId")
         val preferences = context.dataStore.data.first()
-        return preferences[pref] ?: -1
+        return preferences[pref] ?: 1
     }
     suspend fun getCountryName(): String {
         val pref = stringPreferencesKey("countryName")
         val preferences = context.dataStore.data.first()
-        return preferences[pref] ?: ""
+        return preferences[pref] ?: "Россия"
     }
     suspend fun getCityName(): String {
         val pref = stringPreferencesKey("cityName")
         val preferences = context.dataStore.data.first()
-        return preferences[pref] ?: ""
+        return preferences[pref] ?: "Москва"
     }
     suspend fun setCountryId(id: Int) {
         val pref = intPreferencesKey("countryId")

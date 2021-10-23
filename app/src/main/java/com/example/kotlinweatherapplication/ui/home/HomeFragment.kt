@@ -59,7 +59,7 @@ class HomeFragment : Fragment(R.layout.fragment_home), CitiesOnItemClickListener
         binding.toolbar.tvEnterCity.addTextChangedListener { editable ->
             job?.cancel()
             job = MainScope().launch {
-                delay(1500)
+                delay(500)
                 editable?.let {
                     if (editable.toString().trim()
                             .isNotEmpty()
@@ -137,16 +137,15 @@ class HomeFragment : Fragment(R.layout.fragment_home), CitiesOnItemClickListener
         for (item in hourly) {
             list.add(item.temp.toInt())
         }
-        Log.d("HomeViewModel", list.toString())
         return AAChartModel()
             .chartType(AAChartType.Spline)
-            .title("Weather by hours")
+            .title(getString(R.string.hourlytemp))
             .backgroundColor("#9a7ffa")
             .dataLabelsEnabled(false)
             .series(
                 arrayOf(
                     AASeriesElement()
-                        .name("Temperature")
+                        .name(getString(R.string.temp))
                         .data(list.toTypedArray())
                 )
             )

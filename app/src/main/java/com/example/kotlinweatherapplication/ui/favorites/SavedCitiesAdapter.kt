@@ -11,9 +11,7 @@ import com.example.kotlinweatherapplication.Utils.Formatting.getTemp
 import com.example.kotlinweatherapplication.databinding.SavedCityItemBinding
 import com.example.kotlinweatherapplication.networking.openweathermap.current_weather_models.CurrentWeatherResponse
 
-class SavedCitiesAdapter : ListAdapter<CurrentWeatherResponse, SavedCitiesAdapter.ViewHolder>(
-    differCallback
-) {
+class SavedCitiesAdapter : RecyclerView.Adapter<SavedCitiesAdapter.ViewHolder>() {
 
     inner class ViewHolder(private val binding: SavedCityItemBinding) :
         RecyclerView.ViewHolder(binding.root) {
@@ -29,7 +27,7 @@ class SavedCitiesAdapter : ListAdapter<CurrentWeatherResponse, SavedCitiesAdapte
         }
     }
 
-    object differCallback : DiffUtil.ItemCallback<CurrentWeatherResponse>(){
+    private val differCallback = object : DiffUtil.ItemCallback<CurrentWeatherResponse>(){
         override fun areItemsTheSame(oldItem: CurrentWeatherResponse, newItem: CurrentWeatherResponse): Boolean = oldItem.id == newItem.id
         override fun areContentsTheSame(oldItem: CurrentWeatherResponse, newItem: CurrentWeatherResponse): Boolean = oldItem.id == newItem.id
     }
@@ -42,10 +40,12 @@ class SavedCitiesAdapter : ListAdapter<CurrentWeatherResponse, SavedCitiesAdapte
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val currentItem = getItem(position)
+        val currentItem = differ.currentList[position]
         currentItem?.let{
             holder.bind(it)
         }
     }
+
+    override fun getItemCount() = differ.currentList.size
 
 }

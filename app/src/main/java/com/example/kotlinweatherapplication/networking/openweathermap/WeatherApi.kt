@@ -9,6 +9,7 @@ interface WeatherApi {
 
     @GET("data/2.5/onecall?")
     suspend fun getWeatherForecast(@Query("lat") lat: Double, @Query("lon") lon: Double,
+                                   @Query("lang") lang: String = "ru",
                                    @Query("exclude") exclude: String = "minutes",
                                    @Query("units") units: String = "metric",
                                    @Query("appid") appId: String = WEATHER_API_KEY)

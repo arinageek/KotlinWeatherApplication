@@ -9,6 +9,12 @@
     <string name="turn_off">Отключить</string>
     <string name="enter_city">Введите город</string>
     <string name="on_map">На карте</string>
+    <string name="city">Город</string>
+    <string name="hourlytemp">Почасовая температура</string>
+    <string name="temp">Температура</string>
+    <string name="where_do_you_live">Где вы проживаете?</string>
+    <string name="save">Сохранить</string>
+    <string name="deleted_city_message">Город удален из сохраненных</string>
 
     <string-array name="countryIds">
         <item>19</item>

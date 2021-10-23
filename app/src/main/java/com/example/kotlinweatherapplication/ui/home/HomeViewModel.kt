@@ -10,6 +10,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.kotlinweatherapplication.database.DataStoreManager
 import com.example.kotlinweatherapplication.database.entities.City
 import com.example.kotlinweatherapplication.networking.openweathermap.forecast_models.ForecastWeatherResponse
 import com.example.kotlinweatherapplication.networking.vk.cities_models.CitiesResponse
@@ -26,7 +27,8 @@ import javax.inject.Inject
 class HomeViewModel @Inject constructor(
     val app: Application,
     private val weatherRepository: WeatherRepository,
-    private val citiesRepository: SavedCitiesRepository
+    private val citiesRepository: SavedCitiesRepository,
+    private val dataStore: DataStoreManager
 ) : ViewModel() {
 
     private val TAG = "HomeViewModel"
@@ -46,16 +48,18 @@ class HomeViewModel @Inject constructor(
     val isAlreadySaved: LiveData<Boolean>
         get() = _isAlreadySaved
 
-    var currentCity: String = "Moscow"
-
+    var currentCity: String = "Москва"
 
     init {
-        getWeatherForecast()
+        viewModelScope.launch {
+            currentCity = dataStore.getCityName()
+            getCityCoordinates(currentCity)
+        }
     }
 
     fun insertCity() = viewModelScope.launch {
         if (!currentCity.isNullOrBlank()) {
-            citiesRepository.insertCity(City(name = currentCity))
+            citiesRepository.insertCity(currentCity)
             _isAlreadySaved.postValue(true)
         }
     }
