@@ -45,7 +45,10 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
             viewModel.event.collect { event ->
                 when (event) {
                     is SettingsViewModel.SettingsEvent.ShowIncorrectDataNotification -> {
-                        Snackbar.make(view, "Incorrect or already saved location", Snackbar.LENGTH_SHORT).show()
+                        Toast.makeText(context, getString(R.string.settings_incorrect_data), Toast.LENGTH_SHORT).show()
+                    }
+                    is SettingsViewModel.SettingsEvent.ShowDataSavedNotification -> {
+                        Toast.makeText(context, getString(R.string.settings_success_message), Toast.LENGTH_SHORT).show()
                     }
                 }
             }

@@ -71,10 +71,12 @@ class SettingsViewModel @Inject constructor(
         dataStore.setCountryId(currentCountryId)
         dataStore.setCountryName(currentCountry)
         dataStore.setCityName(currentCity)
+        eventChannel.send(SettingsEvent.ShowDataSavedNotification)
     }
 
     sealed class SettingsEvent {
         object ShowIncorrectDataNotification : SettingsEvent()
+        object ShowDataSavedNotification : SettingsEvent()
     }
 
 }

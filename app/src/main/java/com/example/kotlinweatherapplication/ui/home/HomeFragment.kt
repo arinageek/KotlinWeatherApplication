@@ -3,6 +3,7 @@ package com.example.kotlinweatherapplication.ui.home
 import android.os.Bundle
 import android.util.Log
 import android.view.*
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
@@ -94,6 +95,9 @@ class HomeFragment : Fragment(R.layout.fragment_home), CitiesOnItemClickListener
                     is HomeViewModel.Event.removeNoInternetConnectionMessage -> {
                         binding.tvNoConnection.visibility = View.GONE
                         binding.cardView.visibility = View.VISIBLE
+                    }
+                    is HomeViewModel.Event.showCityInsertedMessage -> {
+                        Toast.makeText(context, getString(R.string.message_city_saved), Toast.LENGTH_SHORT).show()
                     }
                 }
             }

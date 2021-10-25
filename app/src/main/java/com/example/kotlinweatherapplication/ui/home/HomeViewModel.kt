@@ -60,6 +60,7 @@ class HomeViewModel @Inject constructor(
     fun insertCity() = viewModelScope.launch {
         if (!currentCity.isNullOrBlank()) {
             citiesRepository.insertCity(currentCity)
+            eventChannel.send(Event.showCityInsertedMessage)
             _isAlreadySaved.postValue(true)
         }
     }
@@ -139,6 +140,7 @@ class HomeViewModel @Inject constructor(
     sealed class Event {
         object showNoInternetConnectionMessage : Event()
         object removeNoInternetConnectionMessage : Event()
+        object showCityInsertedMessage : Event()
     }
 
 }

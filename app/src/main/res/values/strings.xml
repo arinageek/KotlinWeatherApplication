@@ -15,6 +15,9 @@
     <string name="where_do_you_live">Где вы проживаете?</string>
     <string name="save">Сохранить</string>
     <string name="deleted_city_message">Город удален из сохраненных</string>
+    <string name="settings_incorrect_data">Данные не корректные или уже сохранены</string>
+    <string name="settings_success_message">Ваше местоположение успешно сохранено</string>
+    <string name="message_city_saved">Город успешно сохранен</string>
 
     <string-array name="countryIds">
         <item>19</item>
